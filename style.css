@@ -866,26 +866,33 @@ blockquote.summary-box strong { color: var(--gold); font-style: normal; }
   font-style: italic;
 }
 .g-word {
-  color: var(--red);
-  font-weight: 700;
-  text-decoration: underline dotted var(--red);
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
-  position: relative;
-  padding: 0.1rem 0.35rem;
-  display: inline-block;
+  border: none;
+  background: transparent;
+  padding: 0 1px;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s;
+  display: inline;
 }
 .g-word:hover:not(.found) {
-  background: rgba(139,26,26,0.15);
-  transform: scale(1.05);
+  /* Zůstává vizuálně nerozeznatelné od běžného textu, pouze s kurzorem pointer */
+  color: inherit;
+  text-decoration: none;
+  background: transparent;
 }
 .g-word.found {
   color: #155724;
+  font-weight: 700;
   text-decoration: none;
   background: #d4edda;
   border: 1px solid #28a745;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
   cursor: default;
+  display: inline-block;
 }
 .found-counter {
   font-family: 'Playfair Display', serif;
