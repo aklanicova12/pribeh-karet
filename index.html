@@ -108,18 +108,21 @@
       <span class="task-badge">♠ Úkol 1</span>
       <h3 class="task-title">Spojovačka – Duchovní a biblický význam karet</h3>
     </div>
-    <p class="task-instructions">Klikni na kartu v levém sloupci, pak klikni na její správný biblický význam v pravém sloupci. Správné páry se zelené zabarví.</p>
+    <p class="task-instructions">Klikni na kartu v levém sloupci a poté na její správný biblický význam v pravém sloupci (nebo naopak). Správný pár zezelená a zamkne se, chybný krátce blikne červeně.</p>
     <div class="matching-game" id="task1">
       <div class="match-col">
-        <div class="match-col-label">🃏 Karta</div>
-        <div id="match-cards"></div>
+        <div class="match-col-label">🃏 Karta (13 karet)</div>
+        <div id="match-cards" class="match-items-container"></div>
       </div>
       <div class="match-col">
-        <div class="match-col-label">✝ Biblický význam</div>
-        <div id="match-meanings"></div>
+        <div class="match-col-label">✝ Biblický význam (13 významů)</div>
+        <div id="match-meanings" class="match-items-container"></div>
       </div>
     </div>
-    <p class="match-progress">Spárováno: 0 / 13</p>
+    <div class="task-footer-bar">
+      <p class="match-progress" id="task1-progress">Spárováno: <strong>0</strong> / 13</p>
+      <button type="button" id="reset-task1-btn" class="task-btn secondary">↺ Zamíchat a začít znovu</button>
+    </div>
     <div id="task1-result" class="task-result"></div>
   </div>
 
@@ -129,29 +132,32 @@
       <span class="task-badge">♥ Úkol 2</span>
       <h3 class="task-title">Odemkni starostův zámek – Kalendářní šifra</h3>
     </div>
-    <p class="task-instructions">Zadej správná tři čísla z&nbsp;příběhu a&nbsp;osvoboď vojáka z&nbsp;vazby. Nápověda: počty ok, karet a&nbsp;zdvihů v&nbsp;balíčku.</p>
+    <p class="task-instructions">Zadej správná tři čísla z&nbsp;příběhu a&nbsp;osvoboď vojáka z&nbsp;vazby. Čísla můžeš vepsat přímo z klávesnice nebo měnit tlačítky ▲ a ▼. Nápověda: počty ok, karet a&nbsp;zdvihů v&nbsp;balíčku.</p>
     <div class="lock-game" id="task2">
       <div class="lock-display">
         <div class="lock-digit">
-          <button class="digit-btn digit-up" aria-label="Zvýšit">▲</button>
-          <input class="digit-input" type="number" value="0" min="0" max="999" aria-label="Počet dnů v roce">
-          <button class="digit-btn digit-down" aria-label="Snížit">▼</button>
-          <label>Dnů v&nbsp;roce</label>
+          <button type="button" class="digit-btn digit-up" data-index="0" aria-label="Zvýšit hodnotu">▲</button>
+          <input class="digit-input" id="lock-digit-0" type="number" value="0" min="0" max="999" aria-label="Počet dnů v roce">
+          <button type="button" class="digit-btn digit-down" data-index="0" aria-label="Snížit hodnotu">▼</button>
+          <label for="lock-digit-0">Dnů v&nbsp;roce</label>
         </div>
         <div class="lock-digit">
-          <button class="digit-btn digit-up" aria-label="Zvýšit">▲</button>
-          <input class="digit-input" type="number" value="0" min="0" max="999" aria-label="Počet týdnů v roce">
-          <button class="digit-btn digit-down" aria-label="Snížit">▼</button>
-          <label>Týdnů v&nbsp;roce</label>
+          <button type="button" class="digit-btn digit-up" data-index="1" aria-label="Zvýšit hodnotu">▲</button>
+          <input class="digit-input" id="lock-digit-1" type="number" value="0" min="0" max="999" aria-label="Počet týdnů v roce">
+          <button type="button" class="digit-btn digit-down" data-index="1" aria-label="Snížit hodnotu">▼</button>
+          <label for="lock-digit-1">Týdnů v&nbsp;roce</label>
         </div>
         <div class="lock-digit">
-          <button class="digit-btn digit-up" aria-label="Zvýšit">▲</button>
-          <input class="digit-input" type="number" value="0" min="0" max="999" aria-label="Počet lunárních měsíců">
-          <button class="digit-btn digit-down" aria-label="Snížit">▼</button>
-          <label>Lunárních měsíců</label>
+          <button type="button" class="digit-btn digit-up" data-index="2" aria-label="Zvýšit hodnotu">▲</button>
+          <input class="digit-input" id="lock-digit-2" type="number" value="0" min="0" max="999" aria-label="Počet lunárních měsíců">
+          <button type="button" class="digit-btn digit-down" data-index="2" aria-label="Snížit hodnotu">▼</button>
+          <label for="lock-digit-2">Lunárních měsíců</label>
         </div>
       </div>
-      <button id="unlock-btn">🔒 Odemknout zámek</button>
+      <div class="task-btn-group">
+        <button type="button" id="unlock-btn" class="task-btn">🔒 Odemknout zámek</button>
+        <button type="button" id="reset-lock-btn" class="task-btn secondary">↺ Vynulovat</button>
+      </div>
       <div id="task2-result" class="task-result"></div>
     </div>
   </div>
@@ -311,25 +317,31 @@
   </blockquote>
 
   <!-- ÚKOL 3 -->
-  <div class="task-frame">
+  <div class="task-frame" id="task3-frame">
     <div class="task-header">
       <span class="task-badge">♦ Úkol 3</span>
       <h3 class="task-title">Třídicí kvíz – Anglická vs. Německá verze</h3>
     </div>
-    <p class="task-instructions">Klikni na kartičku ze zásobníku, pak klikni na správný sloupec (nebo klikni na kartičku v&nbsp;sloupci pro vrácení). Po přiřazení všech 8 kartiček stiskni „Zkontrolovat".</p>
+    <p class="task-instructions">Rozřaď všech 8 kartiček ze zásobníku do správného sloupce. Můžeš kliknout na kartičku a pak na sloupec, nebo ji přetáhnout (Drag & Drop). Kliknutím na zařazenou kartičku ji vrátíš zpět. Poté stiskni „Zkontrolovat zařazení“.</p>
     <div class="sort-game" id="task3">
-      <div id="sort-pool" class="sort-cards-pool"></div>
+      <div class="sort-pool-container">
+        <div class="sort-pool-label">Zásobník pojmů k zařazení (8 kartiček):</div>
+        <div id="sort-pool" class="sort-cards-pool" data-zone="pool"></div>
+      </div>
       <div class="sort-columns">
-        <div class="sort-col eng" id="sort-eng">
-          <div class="sort-col-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Anglická verze</div>
-          <div class="sort-items"></div>
+        <div class="sort-col eng" id="sort-eng" data-zone="eng">
+          <div class="sort-col-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Anglická verze (protestantská)</div>
+          <div class="sort-items" data-zone="eng"></div>
         </div>
-        <div class="sort-col ger" id="sort-ger">
-          <div class="sort-col-title">🇩🇪 Německá verze (1821)</div>
-          <div class="sort-items"></div>
+        <div class="sort-col ger" id="sort-ger" data-zone="ger">
+          <div class="sort-col-title">🇩🇪 Německá verze (katolická, 1821)</div>
+          <div class="sort-items" data-zone="ger"></div>
         </div>
       </div>
-      <button id="check-sort-btn" class="task-btn">✓ Zkontrolovat zařazení</button>
+      <div class="task-btn-group">
+        <button type="button" id="check-sort-btn" class="task-btn">✓ Zkontrolovat zařazení</button>
+        <button type="button" id="reset-sort-btn" class="task-btn secondary">↺ Resetovat</button>
+      </div>
       <div id="task3-result" class="task-result"></div>
     </div>
   </div>
@@ -374,17 +386,18 @@
   </figure>
 
   <!-- ÚKOL 4 -->
-  <div class="task-frame">
+  <div class="task-frame" id="task4-frame">
     <div class="task-header">
       <span class="task-badge">♣ Úkol 4</span>
-      <h3 class="task-title">Jazykový detektor – Najdi germanismy v&nbsp;textu</h3>
+      <h3 class="task-title">Jazykový detektor – Germanismy v rukopisu Johana Trnky</h3>
     </div>
-    <p class="task-instructions">V&nbsp;ukázce z&nbsp;Trnkova rukopisu jsou červeně podtržena slova německého původu. Klikni na každé, abys zjistil/a jeho původ a&nbsp;výzam. Najdi všechny 4&nbsp;germanismy!</p>
+    <p class="task-instructions">V úryvku z Trnkova zápisu (1850) najdi a rozklikni všechna 4 dobová slova německého původu (germanismy), která prozrazují realitu habsburské armády. Po kliknutí se slovo zvýrazní a zobrazí se jeho český překlad a etymologie.</p>
     <div id="task4">
       <p class="found-counter">Nalezeno germanismů: <span id="found-count">0</span> / 4</p>
-      <p class="detector-text">„<span class="g-word" data-group="felbebl" data-tip="Felbébl (z&nbsp;něm. Feldwebel) = šikovatel, poddůstojnická hodnost v&nbsp;habsburské armádě">Felbébla</span> adjutant poručil mu karty schovat... postavil se <span class="g-word" data-group="felbebl" data-tip="Felbébl (z&nbsp;něm. Feldwebel) = šikovatel, poddůstojnická hodnost v&nbsp;habsburské armádě">felbébl</span> u&nbsp;dveří, aby vojáka <span class="g-word" data-group="arestyrovat" data-tip="Arestýrovat (z&nbsp;něm. arrestieren) = zatknout, vzít do vazby">arestýroval</span>... vzal křížového <span class="g-word" data-group="schorek" data-tip="Schorek (z&nbsp;něm. Schurke) = darebák, ničema – doslovný překlad pro karetního kluka/spodka">schorka</span>, odložil ho na stranu... ostatní tři <span class="g-word" data-group="schorek" data-tip="Schorek (z&nbsp;něm. Schurke) = darebák, ničema – doslovný překlad pro karetního kluka/spodka">schorkové</span> co u&nbsp;mě <span class="g-word" data-group="varta" data-tip="Varta (z&nbsp;něm. Wache / Warte) = stráž, hlídka">vartu</span> stáli."
-        <span class="g-tooltip" id="g-tooltip-box"></span>
-      </p>
+      <div class="detector-text-box">
+        <p class="detector-text">„<span class="g-word" data-word="felbebl" role="button" tabindex="0">Felbébla</span> adjutant poručil mu karty schovat... postavil se <span class="g-word" data-word="felbebl" role="button" tabindex="0">felbébl</span> u&nbsp;dveří, aby vojáka <span class="g-word" data-word="arestyrovat" role="button" tabindex="0">arestýroval</span>... vzal křížového <span class="g-word" data-word="schorek" role="button" tabindex="0">schorka</span>, odložil ho na stranu... ostatní tři <span class="g-word" data-word="schorek" role="button" tabindex="0">schorkové</span> co u&nbsp;mě <span class="g-word" data-word="varta" role="button" tabindex="0">vartu</span> stáli.“</p>
+      </div>
+      <div id="task4-explanations" class="explanations-list"></div>
       <div id="task4-result" class="task-result"></div>
     </div>
   </div>
@@ -527,105 +540,150 @@
   <div class="suit-divider" aria-hidden="true">♠ <span class="red">♥</span> ♦ <span class="red">♣</span></div>
 
   <!-- ÚKOL 5 -->
-  <div class="task-frame">
+  <div class="task-frame" id="task5-frame">
     <div class="task-header">
       <span class="task-badge">♦ Úkol 5</span>
-      <h3 class="task-title">Srovnávací přiřazovačka – „Kdo se skrývá za kartou?"</h3>
+      <h3 class="task-title">Srovnávací přiřazovačka – „Kdo se skrývá za kartou?“</h3>
     </div>
-    <p class="task-instructions">Klikni na kartičku ze zásobníku (označí se červeně), pak klikni na prázdné políčko v&nbsp;tabulce, kam patří. Zeleně = správně, červeně = špatně.</p>
+    <p class="task-instructions">Přiřaď všech 12 kartiček ze zásobníku do 12 prázdných políček tabulky (4 karty × 3 verze). Můžeš kliknout na kartičku a pak na prázdné políčko, nebo kartičku přetáhnout myší (Drag & Drop). Kliknutím na políčko vrátíš kartičku zpět do zásobníku. Poté stiskni tlačítko pro vyhodnocení.</p>
     <div id="task5">
-      <div id="compare-pool" class="compare-pool"></div>
+      <div class="compare-pool-wrap">
+        <div class="compare-pool-label">Zásobník významů (12 kartiček k přiřazení):</div>
+        <div id="compare-pool" class="compare-pool"></div>
+      </div>
       <div class="compare-game">
         <table class="compare-table">
           <thead>
             <tr>
-              <th>Prvek / Karta</th>
-              <th>1. Rukopis J.&nbsp;Trnky (1850)</th>
-              <th>2. M.&nbsp;Černý – Balíček karet (1969)</th>
-              <th>3. Tři sestry – Tramvaj</th>
+              <th scope="col">Prvek / Karta</th>
+              <th scope="col">1. Rukopis J.&nbsp;Trnky (1850)</th>
+              <th scope="col">2. M.&nbsp;Černý – Balíček karet (1969)</th>
+              <th scope="col">3. Tři sestry – Tramvaj (parodie)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Dvojka (2)</td>
-              <td class="compare-cell" data-cell="dvojka-trnka">—</td>
-              <td class="compare-cell" data-cell="dvojka-cerny">—</td>
-              <td class="compare-cell" data-cell="dvojka-tramvaj">—</td>
+              <th scope="row">Dvojka (2)</th>
+              <td class="compare-cell" data-target="dvojka-trnka"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="dvojka-cerny"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="dvojka-tramvaj"><span class="cell-empty-hint">Vlož kartičku</span></td>
             </tr>
             <tr>
-              <td>Královna (Dáma)</td>
-              <td class="compare-cell" data-cell="kralovna-trnka">—</td>
-              <td class="compare-cell" data-cell="kralovna-cerny">—</td>
-              <td class="compare-cell" data-cell="kralovna-tramvaj">—</td>
+              <th scope="row">Královna (Dáma)</th>
+              <td class="compare-cell" data-target="kralovna-trnka"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="kralovna-cerny"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="kralovna-tramvaj"><span class="cell-empty-hint">Vlož kartičku</span></td>
             </tr>
             <tr>
-              <td>Kluk / Spodek</td>
-              <td class="compare-cell" data-cell="kluk-trnka">—</td>
-              <td class="compare-cell" data-cell="kluk-cerny">—</td>
-              <td class="compare-cell" data-cell="kluk-tramvaj">—</td>
+              <th scope="row">Kluk / Spodek</th>
+              <td class="compare-cell" data-target="kluk-trnka"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="kluk-cerny"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="kluk-tramvaj"><span class="cell-empty-hint">Vlož kartičku</span></td>
             </tr>
             <tr>
-              <td>Závěrečná pointa</td>
-              <td class="compare-cell" data-cell="pointa-trnka">—</td>
-              <td class="compare-cell" data-cell="pointa-cerny">—</td>
-              <td class="compare-cell" data-cell="pointa-tramvaj">—</td>
+              <th scope="row">Závěrečná pointa</th>
+              <td class="compare-cell" data-target="pointa-trnka"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="pointa-cerny"><span class="cell-empty-hint">Vlož kartičku</span></td>
+              <td class="compare-cell" data-target="pointa-tramvaj"><span class="cell-empty-hint">Vlož kartičku</span></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button id="reset-compare-btn" class="task-btn">↺ Resetovat</button>
+      <div class="task-btn-group">
+        <button type="button" id="check-compare-btn" class="task-btn">✓ Vyhodnotit tabulku</button>
+        <button type="button" id="reset-compare-btn" class="task-btn secondary">↺ Resetovat</button>
       </div>
       <div id="task5-result" class="task-result"></div>
     </div>
   </div>
 
   <!-- ÚKOL 6 -->
-  <div class="task-frame">
+  <div class="task-frame" id="task6-frame">
     <div class="task-header">
       <span class="task-badge">♠ Úkol 6</span>
       <h3 class="task-title">Závěrečný analytický kvíz</h3>
     </div>
-    <p class="task-instructions">Tři otázky s&nbsp;výběrem odpovědí A/B/C. Klikni na svou odpověď a&nbsp;ihned uvidíš výsledek.</p>
+    <p class="task-instructions">Vyber odpověď (A, B nebo C) u každé ze 3 otázek a poté klikni na tlačítko „Vyhodnotit kvíz“. Zobrazí se správné odpovědi, podrobné vysvětlení a celkové skóre.</p>
     <div class="quiz-game" id="task6">
 
       <!-- Otázka 1 -->
-      <div class="quiz-question-block" id="quiz-q1">
+      <div class="quiz-question-block" id="quiz-q1" data-q="0">
         <div class="quiz-q-text"><span class="quiz-q-num">1.</span> Jak se mění postava vojáka v&nbsp;posledních třech větách rukopisu Johana Trnky (1850) oproti německému tisku z&nbsp;roku 1821?</div>
         <div class="quiz-options">
-          <div class="quiz-option"><span class="opt-letter">A</span> Voják na konci prosí o&nbsp;odpuštění a&nbsp;vstoupí do kláštera.</div>
-          <div class="quiz-option"><span class="opt-letter">B</span> Ze zbožného vojáka se stává „chytrý šibal", který se přizná, že si výklad vymyslel jen proto, aby unikl trestu.</div>
-          <div class="quiz-option"><span class="opt-letter">C</span> Voják odmítne odměnu od majora a&nbsp;obviní ho z&nbsp;nespravedlnosti.</div>
+          <label class="quiz-option" data-opt="A">
+            <input type="radio" name="q1" value="A">
+            <span class="opt-letter">A</span>
+            <span class="opt-text">Voják na konci prosí o&nbsp;odpuštění a&nbsp;vstoupí do kláštera.</span>
+          </label>
+          <label class="quiz-option" data-opt="B">
+            <input type="radio" name="q1" value="B">
+            <span class="opt-letter">B</span>
+            <span class="opt-text">Ze zbožného katolického vojáka se stává „chytrý šibal“, který se mezi svými druhy otevřeně přizná, že si celý výklad vymyslel jen proto, aby unikl trestu („byla to velká práce, bych trestu ušel!“).</span>
+          </label>
+          <label class="quiz-option" data-opt="C">
+            <input type="radio" name="q1" value="C">
+            <span class="opt-letter">C</span>
+            <span class="opt-text">Voják odmítne odměnu od majora a&nbsp;obviní ho z&nbsp;nespravedlnosti.</span>
+          </label>
         </div>
-        <div class="quiz-feedback"></div>
+        <div class="quiz-feedback" id="quiz-fb-1"></div>
       </div>
 
       <!-- Otázka 2 -->
-      <div class="quiz-question-block" id="quiz-q2">
+      <div class="quiz-question-block" id="quiz-q2" data-q="1">
         <div class="quiz-q-text"><span class="quiz-q-num">2.</span> Na jakém principu staví skupina Tři sestry parodii Tramvaj?</div>
         <div class="quiz-options">
-          <div class="quiz-option"><span class="opt-letter">A</span> Paroduje strukturu numerické alegorie a&nbsp;absurdní matematiky – místo karet a&nbsp;Boha jsou tu tramvajové nápravy a&nbsp;závod Formule&nbsp;1 v&nbsp;Burkině Faso.</div>
-          <div class="quiz-option"><span class="opt-letter">B</span> Přebírá doslovný biblický výklad karet, ale mění hudební doprovod na punkový rytmus.</div>
-          <div class="quiz-option"><span class="opt-letter">C</span> Vypráví skutečný příběh řidiče pražské tramvaje, který v&nbsp;90.&nbsp;letech vyhrál závod Formule&nbsp;1.</div>
+          <label class="quiz-option" data-opt="A">
+            <input type="radio" name="q2" value="A">
+            <span class="opt-letter">A</span>
+            <span class="opt-text">Paroduje samotnou strukturu numerické alegorie a&nbsp;absurdní matematiky (sčítání náprav, kol, schodů a&nbsp;cinknutí mezi Braníkem a&nbsp;Palmovkou) a&nbsp;převádí posvátný prostor kostela do profánního světa Formule 1 a&nbsp;pražské MHD.</span>
+          </label>
+          <label class="quiz-option" data-opt="B">
+            <input type="radio" name="q2" value="B">
+            <span class="opt-letter">B</span>
+            <span class="opt-text">Přebírá doslovný biblický výklad karet, ale mění hudební doprovod na punkový rytmus.</span>
+          </label>
+          <label class="quiz-option" data-opt="C">
+            <input type="radio" name="q2" value="C">
+            <span class="opt-letter">C</span>
+            <span class="opt-text">Vypráví skutečný příběh řidiče pražské tramvaje, který v&nbsp;90.&nbsp;letech vyhrál závod Formule 1.</span>
+          </label>
         </div>
-        <div class="quiz-feedback"></div>
+        <div class="quiz-feedback" id="quiz-fb-2"></div>
       </div>
 
       <!-- Otázka 3 -->
-      <div class="quiz-question-block" id="quiz-q3">
-        <div class="quiz-q-text"><span class="quiz-q-num">3.</span> Proč v&nbsp;písni Balíček karet (1969) figuruje jméno „T.&nbsp;Taxis Taylor"?</div>
+      <div class="quiz-question-block" id="quiz-q3" data-q="2">
+        <div class="quiz-q-text"><span class="quiz-q-num">3.</span> Proč v&nbsp;písni Balíček karet (1969) figuruje jméno „T.&nbsp;Taxis Taylor“?</div>
         <div class="quiz-options">
-          <div class="quiz-option"><span class="opt-letter">A</span> Jde o&nbsp;skutečného českého legionáře z&nbsp;první světové války.</div>
-          <div class="quiz-option"><span class="opt-letter">B</span> Jde o&nbsp;smyšlené jméno, které vymyslel Lou Fanánek Hagen pro kapelu Tři sestry.</div>
-          <div class="quiz-option"><span class="opt-letter">C</span> Jde o&nbsp;zkomoleninu jména amerického country zpěváka T.&nbsp;Texase Tylera, která se ustálila vlivem ústního šíření (jako kdysi kramářské písně).</div>
+          <label class="quiz-option" data-opt="A">
+            <input type="radio" name="q3" value="A">
+            <span class="opt-letter">A</span>
+            <span class="opt-text">Jde o&nbsp;skutečného českého legionáře z&nbsp;první světové války.</span>
+          </label>
+          <label class="quiz-option" data-opt="B">
+            <input type="radio" name="q3" value="B">
+            <span class="opt-letter">B</span>
+            <span class="opt-text">Jde o&nbsp;smyšlené jméno, které vymyslel až Lou Fanánek Hagen pro kapelu Tři sestry.</span>
+          </label>
+          <label class="quiz-option" data-opt="C">
+            <input type="radio" name="q3" value="C">
+            <span class="opt-letter">C</span>
+            <span class="opt-text">Jde o&nbsp;zkomoleninu jména amerického country zpěváka T.&nbsp;Texase Tylera (The Deck of Cards, 1948), která se v&nbsp;českém prostředí ustálila vlivem ústního a&nbsp;opisovaného šíření textu (podobně jako kdysi u&nbsp;kramářských písní).</span>
+          </label>
         </div>
-        <div class="quiz-feedback"></div>
+        <div class="quiz-feedback" id="quiz-fb-3"></div>
       </div>
 
-      <div id="quiz-final">
+      <div class="task-btn-group">
+        <button type="button" id="check-quiz-btn" class="task-btn">✓ Vyhodnotit kvíz</button>
+        <button type="button" id="reset-quiz-btn" class="task-btn secondary">↺ Zkusit znovu</button>
+      </div>
+
+      <div id="quiz-final" class="task-result">
         <h3>🃏 Výsledek kvízu</h3>
-        <div id="quiz-score-display">0 / 3</div>
-        <p id="quiz-verdict" style="margin-top:0.75rem;font-family:'Lato',sans-serif;font-size:0.95rem;"></p>
+        <div id="quiz-score-display" style="font-size:2rem;font-weight:700;margin:0.5rem 0;"></div>
+        <p id="quiz-verdict" style="margin-top:0.5rem;font-size:1rem;"></p>
       </div>
 
     </div><!-- /quiz-game -->
