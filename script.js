@@ -578,48 +578,81 @@ function initTask4() {
 
   const countDisplay = document.getElementById('found-count');
   const explanationsContainer = document.getElementById('task4-explanations');
+  const feedbackEl = document.getElementById('task4-feedback');
   const resultEl = document.getElementById('task4-result');
-  const words = container.querySelectorAll('.g-word');
+  const allWords = container.querySelectorAll('.detector-word');
 
   const foundSet = new Set();
+  let feedbackTimer = null;
 
-  words.forEach(wordEl => {
-    wordEl.addEventListener('click', () => {
+  function showFeedback(text, type) {
+    if (!feedbackEl) return;
+    if (feedbackTimer) clearTimeout(feedbackTimer);
+    feedbackEl.className = 'detector-hint ' + type;
+    feedbackEl.textContent = text;
+    feedbackTimer = setTimeout(() => {
+      feedbackEl.textContent = '';
+      feedbackEl.className = 'detector-hint';
+    }, 2800);
+  }
+
+  allWords.forEach(wordEl => {
+    const clickHandler = () => {
       const key = wordEl.dataset.word;
-      if (!key || !GERMANISMS[key]) return;
 
-      const info = GERMANISMS[key];
+      // 1. Kliknutí na hledaný germanismus
+      if (key && GERMANISMS[key]) {
+        const info = GERMANISMS[key];
 
-      // Highlight all occurrences in text
-      container.querySelectorAll(`.g-word[data-word="${key}"]`).forEach(w => {
-        w.classList.add('found');
-      });
+        // Zvýrazni všechny výskyty tohoto slova v textu
+        container.querySelectorAll(`.detector-word[data-word="${key}"]`).forEach(w => {
+          w.classList.add('found');
+          w.classList.remove('wrong-word');
+        });
 
-      if (!foundSet.has(key)) {
-        foundSet.add(key);
+        if (!foundSet.has(key)) {
+          foundSet.add(key);
 
-        // Add explanation row
-        const item = document.createElement('div');
-        item.className = 'explanation-item';
-        item.innerHTML = `✅ <strong>${info.name}</strong> (<em>${info.origin}</em>) = ${info.meaning}`;
-        explanationsContainer.appendChild(item);
+          // Přidat řádek s etymologickým vysvětlením
+          const item = document.createElement('div');
+          item.className = 'explanation-item';
+          item.innerHTML = `✅ <strong>${info.name}</strong> (<em>${info.origin}</em>) = ${info.meaning}`;
+          explanationsContainer.appendChild(item);
 
-        countDisplay.textContent = foundSet.size;
-        TaskScores.task4 = foundSet.size * 2;
-        updateGlobalScoreDisplay();
+          countDisplay.textContent = foundSet.size;
+          TaskScores.task4 = foundSet.size * 2;
+          updateGlobalScoreDisplay();
 
-        if (foundSet.size === Object.keys(GERMANISMS).length) {
-          resultEl.className = 'task-result success';
-          resultEl.innerHTML = `🎉 <strong>Výborně!</strong> Nalezeny všechny 4 dobové germanismy. Získáváš 8 bodů!<br>Tento jazykový otisk dokazuje, jak hluboce byl text zakotven ve vojenské realitě rakouského císařství.`;
+          showFeedback(`✅ Správně! Slovo „${info.name}“ je hledaný germanismus.`, 'success');
+
+          if (foundSet.size === Object.keys(GERMANISMS).length) {
+            resultEl.className = 'task-result success';
+            resultEl.innerHTML = `🎉 <strong>Výborně!</strong> Nalezeny všechny 4 dobové germanismy. Získáváš 8 bodů!<br>Tento jazykový otisk dokazuje, jak hluboce byl text zakotven ve vojenské realitě rakouského císařství.`;
+          }
         }
-      }
-    });
+      } else {
+        // 2. Kliknutí na běžné české slovo (nebo nehledaný výraz)
+        if (wordEl.classList.contains('found')) return;
 
-    // Keyboard support
+        wordEl.classList.remove('wrong-word');
+        // Force reflow for animation restart
+        void wordEl.offsetWidth;
+        wordEl.classList.add('wrong-word');
+
+        setTimeout(() => {
+          wordEl.classList.remove('wrong-word');
+        }, 1000);
+
+        const cleanWord = wordEl.textContent.trim().replace(/[.,;:!?„“…]+$/, '');
+        showFeedback(`❌ Slovo „${cleanWord}“ není hledaným germanismem. Hledej vojenské výrazy a hodnosti z němčiny!`, 'error');
+      }
+    };
+
+    wordEl.addEventListener('click', clickHandler);
     wordEl.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        wordEl.click();
+        clickHandler();
       }
     });
   });
