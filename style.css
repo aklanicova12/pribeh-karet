@@ -144,9 +144,14 @@ a:hover { color: var(--red-light); }
   align-items: center;
   gap: 0.4rem;
   border: 2px solid var(--gold);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  cursor: pointer;
 }
-#score-panel:hover { transform: scale(1.05); }
+#score-panel:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(139, 105, 20, 0.4);
+}
 #score-value {
   font-size: 1.3rem;
   font-weight: 700;
@@ -1160,6 +1165,394 @@ blockquote.summary-box strong { color: var(--gold); font-style: normal; }
 }
 #quiz-final h3 { color: var(--gold-light); margin-bottom: 0.5rem; }
 #quiz-score-display { font-size: 2rem; font-weight: 700; color: var(--white); }
+
+/* ── ZÁVĚREČNÝ RAPORT ─────────────────────────────────────── */
+.raport-section {
+  padding: 3rem 0 2rem;
+}
+.raport-frame {
+  background: var(--white);
+  border: 3px double var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  box-shadow: 0 8px 30px var(--shadow);
+  position: relative;
+}
+.raport-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+.raport-subtitle {
+  color: var(--ink-light);
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin: 0.5rem auto 0;
+}
+
+/* Dashboard & Stats */
+.raport-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.raport-stat-card {
+  background: var(--parchment);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+.stat-label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-light);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.stat-value {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.stat-max {
+  font-size: 1.1rem;
+  color: var(--ink-light);
+  font-weight: 400;
+  margin-left: 0.3rem;
+}
+
+/* Progress bar & Milestones */
+.raport-progress-container {
+  margin: 1.5rem 0 2rem;
+}
+.raport-progress-bar {
+  width: 100%;
+  height: 16px;
+  background: var(--parchment-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.raport-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c0392b 0%, #d4af37 70%, #2c4a1e 100%);
+  border-radius: 8px;
+  transition: width 0.4s ease;
+}
+.raport-milestones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.milestone.m-start { color: var(--red); }
+.milestone.m-mid   { color: var(--gold); }
+.milestone.m-end   { color: var(--green); }
+
+.raport-grid-hint {
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+/* Tasks Grid */
+.raport-tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.raport-task-card {
+  background: var(--parchment);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  color: var(--ink);
+  outline: none;
+}
+.raport-task-card:hover {
+  background: var(--parchment-dark);
+  border-color: var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px var(--shadow);
+}
+.raport-task-card:focus-visible {
+  outline: 2px solid var(--gold);
+}
+.raport-task-card.completed {
+  border-color: var(--green);
+  background: #eef5e9;
+}
+.raport-task-card.completed .rtc-score {
+  color: var(--green);
+  font-weight: 700;
+}
+.rtc-num {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-light);
+  font-weight: 700;
+}
+.rtc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.rtc-score {
+  font-size: 0.85rem;
+  color: var(--red);
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+.raport-task-card.completed .rtc-score::after {
+  content: " ✓";
+  color: var(--green);
+}
+
+.raport-action {
+  text-align: center;
+  margin: 1.5rem 0 0.5rem;
+}
+.raport-eval-btn {
+  font-size: 1.15rem;
+  padding: 0.95rem 2.4rem;
+  box-shadow: 0 4px 14px rgba(26,16,8,0.25);
+  cursor: pointer;
+}
+.raport-eval-btn:hover {
+  box-shadow: 0 6px 18px rgba(26,16,8,0.35);
+}
+
+/* ── DEKRET / VÝSLEDKOVÁ KARTA ────────────────────────────── */
+.raport-decree {
+  margin-top: 2rem;
+  animation: decreeAppear 0.5s ease-out;
+}
+@keyframes decreeAppear {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.decree-card {
+  background: #fffef9;
+  border: 4px double var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(184, 160, 112, 0.2), 0 8px 24px var(--shadow);
+  text-align: center;
+}
+.decree-card.decree-master {
+  border-color: var(--gold-light);
+  background: linear-gradient(180deg, #fffef7 0%, #fdf8e6 100%);
+  box-shadow: inset 0 0 40px rgba(201, 162, 39, 0.25), 0 0 30px rgba(201, 162, 39, 0.4);
+}
+.decree-card.decree-officer {
+  border-color: var(--gold);
+  background: #fffdfa;
+}
+.decree-card.decree-warning {
+  border-color: var(--red);
+  background: linear-gradient(180deg, #fffdfb 0%, #fef3f2 100%);
+  box-shadow: inset 0 0 40px rgba(139, 26, 26, 0.12), 0 6px 20px var(--shadow);
+}
+
+/* Vosková pečeť */
+.wax-seal {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35), inset 0 3px 5px rgba(255,255,255,0.45), inset 0 -3px 5px rgba(0,0,0,0.3);
+  position: relative;
+  user-select: none;
+}
+.wax-seal.gold {
+  background: radial-gradient(circle at 35% 35%, #ffe066, #d4af37 60%, #8b6914);
+  color: #3d2b00;
+  border: 3px dashed #fff2a3;
+}
+.wax-seal.silver {
+  background: radial-gradient(circle at 35% 35%, #f1f5f9, #94a3b8 60%, #475569);
+  color: #0f172a;
+  border: 3px dashed #ffffff;
+}
+.wax-seal.warning {
+  background: radial-gradient(circle at 35% 35%, #ff7675, #c0392b 60%, #781e15);
+  color: #fff;
+  border: 3px dashed #fab1a0;
+}
+.wax-seal-icon { font-size: 1.8rem; line-height: 1; }
+.wax-seal-text { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+
+.decree-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--ink);
+}
+.decree-master .decree-title { color: #805b00; }
+.decree-officer .decree-title { color: var(--ink); }
+.decree-warning .decree-title { color: var(--red); }
+
+.decree-quote {
+  background: var(--parchment);
+  border-left: 4px solid var(--gold);
+  padding: 1.1rem 1.5rem;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 1.25rem auto;
+  max-width: 680px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--ink);
+  text-align: left;
+}
+.decree-master .decree-quote {
+  border-left-color: var(--gold-light);
+  background: #fdf8e2;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.decree-warning .decree-quote {
+  border-left-color: var(--red);
+  background: #fdedec;
+}
+
+.decree-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--ink-light);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.decree-missing {
+  margin: 1rem auto 1.5rem;
+  padding: 0.75rem 1rem;
+  background: #fdf5e6;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  max-width: 600px;
+  font-size: 0.95rem;
+  color: var(--ink-light);
+}
+
+.decree-signatures {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 2rem auto 1.5rem;
+  max-width: 640px;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border);
+}
+.signature-item {
+  font-family: 'Playfair Display', Georgia, serif;
+  text-align: center;
+}
+.sig-hand {
+  font-family: 'Brush Script MT', 'Playfair Display', cursive, serif;
+  font-size: 1.35rem;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+.sig-title {
+  font-size: 0.8rem;
+  color: var(--ink-light);
+  letter-spacing: 0.03em;
+}
+
+.decree-btn-row {
+  margin-top: 1.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Cílové zvýraznění úkolu po skoku */
+.highlight-target {
+  box-shadow: 0 0 0 4px var(--gold-light), 0 8px 30px rgba(139, 105, 20, 0.4) !important;
+  animation: targetPulse 0.5s ease 3;
+}
+@keyframes targetPulse {
+  0%, 100% { outline: 3px solid var(--gold-light); }
+  50% { outline: 6px solid var(--red); }
+}
+
+/* Padající karetní symboly (Confetti pro 100 %) */
+.card-confetti-wrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  overflow: hidden;
+}
+.confetti-suit {
+  position: absolute;
+  top: -60px;
+  opacity: 0.95;
+  user-select: none;
+  animation: confettiFall linear forwards;
+}
+.confetti-suit.suit-red {
+  color: #c0392b;
+  text-shadow: 0 2px 8px rgba(192, 57, 43, 0.4);
+}
+.confetti-suit.suit-black {
+  color: #1a1008;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(25vh) rotate(90deg) translateX(25px);
+  }
+  50% {
+    transform: translateY(50vh) rotate(180deg) translateX(-25px);
+  }
+  75% {
+    transform: translateY(75vh) rotate(270deg) translateX(20px);
+  }
+  100% {
+    transform: translateY(105vh) rotate(var(--target-rot, 360deg)) translateX(-15px);
+    opacity: 0;
+  }
+}
 
 /* ── UTILITY ──────────────────────────────────────────────── */
 .text-center { text-align: center; }

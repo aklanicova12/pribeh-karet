@@ -16,6 +16,7 @@
     <li><a href="#kap2">Kapitola 2</a></li>
     <li><a href="#kap3">Kapitola 3</a></li>
     <li><a href="#kap4">Kapitola 4</a></li>
+    <li><a href="#raport">Raport</a></li>
   </ul>
 </nav>
 
@@ -698,14 +699,105 @@
 </section>
 <!-- konec kapitoly 4 -->
 
+<!-- ═══════════════════════════════════════════════════════════
+     ZÁVĚREČNÝ RAPORT: VERDIKT PANA MAJORA
+     ═══════════════════════════════════════════════════════════ -->
+<section class="raport-section" id="raport">
+  <div class="raport-frame">
+    <div class="raport-header">
+      <div class="suit-divider" aria-hidden="true">♠ <span class="red">♥</span> ♦ <span class="red">♣</span></div>
+      <span class="chapter-num">⚖ Celkové vojenské &amp; duchovní vyhodnocení ⚖</span>
+      <h2>Závěrečný raport: Verdikt pana majora</h2>
+      <p class="raport-subtitle">Předstup před velitele posádky k&nbsp;hlášení. Zde se sčítají tvé zásluhy ze všech 6 zkoušek a&nbsp;kapitol (celkem 43 bodů = 100&nbsp;%).</p>
+    </div>
+
+    <!-- Živý přehled bodů a úspěšnosti -->
+    <div class="raport-dashboard">
+      <div class="raport-stats">
+        <div class="raport-stat-card">
+          <span class="stat-label">Získané body</span>
+          <div class="stat-value">
+            <span id="raport-total-points">0</span>
+            <span class="stat-max">/ 43 b.</span>
+          </div>
+        </div>
+        <div class="raport-stat-card">
+          <span class="stat-label">Úspěšnost</span>
+          <div class="stat-value">
+            <span id="raport-total-percent">0</span>
+            <span class="stat-max">%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="raport-progress-container" aria-label="Ukazatel postupu raportu">
+        <div class="raport-progress-bar">
+          <div class="raport-progress-fill" id="raport-progress-fill" style="width: 0%;"></div>
+        </div>
+        <div class="raport-milestones" aria-hidden="true">
+          <span class="milestone m-start">0 % (Běh uličkou)</span>
+          <span class="milestone m-mid">70 % (Bystrý šikovatel)</span>
+          <span class="milestone m-end">100 % (Mistr katechismu)</span>
+        </div>
+      </div>
+
+      <p class="raport-grid-hint">Přehled jednotlivých úkolů (kliknutím na úkol se k&nbsp;němu vrátíš):</p>
+
+      <div class="raport-tasks-grid" id="raport-tasks-grid">
+        <button type="button" class="raport-task-card" data-task-id="task1" aria-label="Přejít na Úkol 1: Karetní spojovačka">
+          <span class="rtc-num">Úkol 1</span>
+          <span class="rtc-title">Karetní spojovačka</span>
+          <span class="rtc-score" id="raport-score-t1">0 / 13 b.</span>
+        </button>
+        <button type="button" class="raport-task-card" data-task-id="task2" aria-label="Přejít na Úkol 2: Starostův zámek">
+          <span class="rtc-num">Úkol 2</span>
+          <span class="rtc-title">Starostův zámek</span>
+          <span class="rtc-score" id="raport-score-t2">0 / 3 b.</span>
+        </button>
+        <button type="button" class="raport-task-card" data-task-id="task3" aria-label="Přejít na Úkol 3: Třídicí kvíz">
+          <span class="rtc-num">Úkol 3</span>
+          <span class="rtc-title">Třídicí kvíz</span>
+          <span class="rtc-score" id="raport-score-t3">0 / 8 b.</span>
+        </button>
+        <button type="button" class="raport-task-card" data-task-id="task4" aria-label="Přejít na Úkol 4: Jazykový detektor">
+          <span class="rtc-num">Úkol 4</span>
+          <span class="rtc-title">Jazykový detektor</span>
+          <span class="rtc-score" id="raport-score-t4">0 / 4 b.</span>
+        </button>
+        <button type="button" class="raport-task-card" data-task-id="task5" aria-label="Přejít na Úkol 5: Srovnávací tabulka">
+          <span class="rtc-num">Úkol 5</span>
+          <span class="rtc-title">Srovnávací tabulka</span>
+          <span class="rtc-score" id="raport-score-t5">0 / 12 b.</span>
+        </button>
+        <button type="button" class="raport-task-card" data-task-id="task6" aria-label="Přejít na Úkol 6: Závěrečný ABC kvíz">
+          <span class="rtc-num">Úkol 6</span>
+          <span class="rtc-title">Závěrečný ABC kvíz</span>
+          <span class="rtc-score" id="raport-score-t6">0 / 3 b.</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tlačítko pro vyhodnocení celého příběhu -->
+    <div class="raport-action">
+      <button type="button" id="eval-story-btn" class="task-btn raport-eval-btn">
+        📜 Vyhodnotit celý příběh
+      </button>
+    </div>
+
+    <!-- Zde se vykreslí dobová karta / dekret -->
+    <div id="raport-decree" class="raport-decree" style="display: none;" aria-live="polite"></div>
+
+  </div>
+</section>
+
 </main>
 
 <!-- ── SCORE PANEL ──────────────────────────────────────────── -->
-<div id="score-panel" aria-live="polite" aria-label="Celkové skóre">
+<a href="#raport" id="score-panel" aria-live="polite" aria-label="Zobrazit celkové skóre a Závěrečný raport">
   <span class="score-label">♠ Skóre</span>
   <span id="score-value">0</span>
-  <span class="score-label">bodů</span>
-</div>
+  <span class="score-label">/ 43 b.</span>
+</a>
 
 <script src="script.js"></script>
 </body>

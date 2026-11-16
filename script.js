@@ -8,24 +8,69 @@
 
 /* ── SCORE TRACKING ───────────────────────────────────────── */
 const TaskScores = {
-  task1: 0, // max 13 (1 per pair)
-  task2: 0, // max 5
-  task3: 0, // max 8
-  task4: 0, // max 8 (2 per germanism)
-  task5: 0, // max 12
-  task6: 0  // max 15 (5 per question)
+  task1: 0, // max 13 (1 b. per card pair)
+  task2: 0, // max 3 (3 b. for code 365-52-13)
+  task3: 0, // max 8 (1 b. per correctly sorted card)
+  task4: 0, // max 4 (1 b. per found germanism)
+  task5: 0, // max 12 (1 b. per correctly placed card)
+  task6: 0  // max 3 (1 b. per correct answer)
 };
 
 function updateGlobalScoreDisplay() {
   const total = Object.values(TaskScores).reduce((a, b) => a + b, 0);
+  const percent = Math.round((total / 43) * 100);
+
+  // Floating score panel
   const el = document.getElementById('score-value');
   const panel = document.getElementById('score-panel');
   if (el) {
     el.textContent = total;
   }
   if (panel) {
-    panel.style.transform = 'scale(1.15)';
-    setTimeout(() => { panel.style.transform = ''; }, 250);
+    panel.style.transform = 'scale(1.12)';
+    setTimeout(() => { panel.style.transform = ''; }, 200);
+  }
+
+  // Live raport metrics
+  const rPoints = document.getElementById('raport-total-points');
+  if (rPoints) rPoints.textContent = total;
+
+  const rPercent = document.getElementById('raport-total-percent');
+  if (rPercent) rPercent.textContent = percent;
+
+  const rFill = document.getElementById('raport-progress-fill');
+  if (rFill) rFill.style.width = Math.min(100, Math.max(0, percent)) + '%';
+
+  // Task cards live updates
+  const t1 = document.getElementById('raport-score-t1');
+  if (t1) {
+    t1.textContent = `${TaskScores.task1} / 13 b.`;
+    t1.closest('.raport-task-card')?.classList.toggle('completed', TaskScores.task1 === 13);
+  }
+  const t2 = document.getElementById('raport-score-t2');
+  if (t2) {
+    t2.textContent = `${TaskScores.task2} / 3 b.`;
+    t2.closest('.raport-task-card')?.classList.toggle('completed', TaskScores.task2 === 3);
+  }
+  const t3 = document.getElementById('raport-score-t3');
+  if (t3) {
+    t3.textContent = `${TaskScores.task3} / 8 b.`;
+    t3.closest('.raport-task-card')?.classList.toggle('completed', TaskScores.task3 === 8);
+  }
+  const t4 = document.getElementById('raport-score-t4');
+  if (t4) {
+    t4.textContent = `${TaskScores.task4} / 4 b.`;
+    t4.closest('.raport-task-card')?.classList.toggle('completed', TaskScores.task4 === 4);
+  }
+  const t5 = document.getElementById('raport-score-t5');
+  if (t5) {
+    t5.textContent = `${TaskScores.task5} / 12 b.`;
+    t5.closest('.raport-task-card')?.classList.toggle('completed', TaskScores.task5 === 12);
+  }
+  const t6 = document.getElementById('raport-score-t6');
+  if (t6) {
+    t6.textContent = `${TaskScores.task6} / 3 b.`;
+    t6.closest('.raport-task-card')?.classList.toggle('completed', TaskScores.task6 === 3);
   }
 }
 
@@ -45,21 +90,21 @@ function initProgressBar() {
 /* ── ACTIVE NAVIGATION ────────────────────────────────────── */
 function initActiveNav() {
   const links = document.querySelectorAll('.nav-links a[href^="#"]');
-  const chapters = document.querySelectorAll('.chapter');
-  if (!links.length || !chapters.length) return;
+  const sections = document.querySelectorAll('.chapter, .raport-section');
+  if (!links.length || !sections.length) return;
 
   const onScroll = () => {
     const scrollPos = window.scrollY + 120;
     let currentId = '';
-    chapters.forEach(ch => {
-      const top = ch.offsetTop;
-      const height = ch.offsetHeight;
+    sections.forEach(sec => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
       if (scrollPos >= top && scrollPos < top + height) {
-        currentId = ch.id;
+        currentId = sec.id;
       }
     });
-    if (!currentId && window.scrollY < 200 && chapters[0]) {
-      currentId = chapters[0].id;
+    if (!currentId && window.scrollY < 200 && sections[0]) {
+      currentId = sections[0].id;
     }
     links.forEach(a => {
       const href = a.getAttribute('href');
@@ -168,6 +213,8 @@ function initTask1() {
     selectedItem = null;
     matchedCount = 0;
     isChecking = false;
+    TaskScores.task1 = 0;
+    updateGlobalScoreDisplay();
     updateProgress();
 
     if (resultEl) {
@@ -327,12 +374,14 @@ function initTask2() {
     const isCorrect = vals[0] === CORRECT[0] && vals[1] === CORRECT[1] && vals[2] === CORRECT[2];
 
     if (isCorrect) {
-      TaskScores.task2 = 5;
+      TaskScores.task2 = 3;
       updateGlobalScoreDisplay();
       resultEl.className = 'task-result success';
-      resultEl.innerHTML = '🔓 <strong>Výborně!</strong> Celý balíček tak vojákovi nahrazuje Bibli, věčný kalendář (Almanack), modlitební knížku i samotné hrací karty. Získáváš 5 bodů!';
+      resultEl.innerHTML = '🔓 <strong>Výborně!</strong> Celý balíček tak vojákovi nahrazuje Bibli, věčný kalendář (Almanack), modlitební knížku i samotné hrací karty. Získáváš 3 body!';
       unlockBtn.textContent = '🔓 Zámek odemčen';
     } else {
+      TaskScores.task2 = 0;
+      updateGlobalScoreDisplay();
       const lockDisplay = container.querySelector('.lock-display');
       if (lockDisplay) {
         lockDisplay.classList.add('lock-shake');
@@ -356,6 +405,8 @@ function initTask2() {
       resultEl.style.display = 'none';
       resultEl.textContent = '';
       unlockBtn.textContent = '🔒 Odemknout zámek';
+      TaskScores.task2 = 0;
+      updateGlobalScoreDisplay();
     });
   }
 }
@@ -391,6 +442,8 @@ function initTask3() {
 
   function renderItems() {
     selectedChip = null;
+    TaskScores.task3 = 0;
+    updateGlobalScoreDisplay();
     if (resultEl) {
       resultEl.className = 'task-result';
       resultEl.style.display = 'none';
@@ -620,14 +673,14 @@ function initTask4() {
           explanationsContainer.appendChild(item);
 
           countDisplay.textContent = foundSet.size;
-          TaskScores.task4 = foundSet.size * 2;
+          TaskScores.task4 = foundSet.size;
           updateGlobalScoreDisplay();
 
           showFeedback(`✅ Správně! Slovo „${info.name}“ je hledaný germanismus.`, 'success');
 
           if (foundSet.size === Object.keys(GERMANISMS).length) {
             resultEl.className = 'task-result success';
-            resultEl.innerHTML = `🎉 <strong>Výborně!</strong> Nalezeny všechny 4 dobové germanismy. Získáváš 8 bodů!<br>Tento jazykový otisk dokazuje, jak hluboce byl text zakotven ve vojenské realitě rakouského císařství.`;
+            resultEl.innerHTML = `🎉 <strong>Výborně!</strong> Nalezeny všechny 4 dobové germanismy. Získáváš 4 body!<br>Tento jazykový otisk dokazuje, jak hluboce byl text zakotven ve vojenské realitě rakouského císařství.`;
           }
         }
       } else {
@@ -690,6 +743,8 @@ function initTask5() {
 
   function renderGame() {
     selectedChip = null;
+    TaskScores.task5 = 0;
+    updateGlobalScoreDisplay();
     if (resultEl) {
       resultEl.className = 'task-result';
       resultEl.style.display = 'none';
@@ -983,7 +1038,7 @@ function initTask6() {
       return;
     }
 
-    const earnedPoints = correctCount * 5;
+    const earnedPoints = correctCount;
     TaskScores.task6 = earnedPoints;
     updateGlobalScoreDisplay();
 
@@ -1018,8 +1073,229 @@ function initTask6() {
       if (finalBox) {
         finalBox.style.display = 'none';
       }
+      TaskScores.task6 = 0;
+      updateGlobalScoreDisplay();
     });
   }
+}
+
+/* ════════════════════════════════════════════════════════════
+   ZÁVĚREČNÝ RAPORT: VERDIKT PANA MAJORA
+   ════════════════════════════════════════════════════════════ */
+function launchCardConfetti() {
+  const old = document.getElementById('card-confetti-wrap');
+  if (old) old.remove();
+
+  const wrap = document.createElement('div');
+  wrap.id = 'card-confetti-wrap';
+  wrap.className = 'card-confetti-wrap';
+  wrap.setAttribute('aria-hidden', 'true');
+
+  const suits = ['♠', '♥', '♦', '♣'];
+  const count = 65;
+
+  for (let i = 0; i < count; i++) {
+    const chip = document.createElement('span');
+    chip.className = 'confetti-suit';
+    const suit = suits[Math.floor(Math.random() * suits.length)];
+    chip.textContent = suit;
+    chip.classList.add((suit === '♥' || suit === '♦') ? 'suit-red' : 'suit-black');
+
+    const left = Math.random() * 100;
+    const size = 18 + Math.random() * 26;
+    const duration = 2.8 + Math.random() * 2.4;
+    const delay = Math.random() * 1.5;
+    const rot = -180 + Math.random() * 360;
+
+    chip.style.left = `${left}%`;
+    chip.style.fontSize = `${size}px`;
+    chip.style.animationDuration = `${duration}s`;
+    chip.style.animationDelay = `${delay}s`;
+    chip.style.setProperty('--target-rot', `${rot}deg`);
+
+    wrap.appendChild(chip);
+  }
+
+  document.body.appendChild(wrap);
+  setTimeout(() => {
+    if (wrap.parentNode) wrap.remove();
+  }, 6500);
+}
+
+function scrollToTask(taskId) {
+  const el = document.getElementById(taskId);
+  if (!el) return;
+  const target = el.closest('.task-frame') || el;
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  target.classList.add('highlight-target');
+  setTimeout(() => {
+    target.classList.remove('highlight-target');
+  }, 2000);
+}
+
+function getFirstIncompleteTask() {
+  const tasks = [
+    { id: 'task1', name: 'Úkol 1 (Karetní spojovačka)', score: TaskScores.task1, max: 13 },
+    { id: 'task2', name: 'Úkol 2 (Starostův zámek)',     score: TaskScores.task2, max: 3 },
+    { id: 'task3', name: 'Úkol 3 (Třídicí kvíz)',        score: TaskScores.task3, max: 8 },
+    { id: 'task4', name: 'Úkol 4 (Jazykový detektor)',   score: TaskScores.task4, max: 4 },
+    { id: 'task5', name: 'Úkol 5 (Srovnávací tabulka)',  score: TaskScores.task5, max: 12 },
+    { id: 'task6', name: 'Úkol 6 (Závěrečný ABC kvíz)',  score: TaskScores.task6, max: 3 }
+  ];
+  return tasks.find(t => t.score < t.max) || null;
+}
+
+function getMissingTasksList() {
+  const tasks = [
+    { id: 'task1', name: 'Úkol 1', score: TaskScores.task1, max: 13 },
+    { id: 'task2', name: 'Úkol 2', score: TaskScores.task2, max: 3 },
+    { id: 'task3', name: 'Úkol 3', score: TaskScores.task3, max: 8 },
+    { id: 'task4', name: 'Úkol 4', score: TaskScores.task4, max: 4 },
+    { id: 'task5', name: 'Úkol 5', score: TaskScores.task5, max: 12 },
+    { id: 'task6', name: 'Úkol 6', score: TaskScores.task6, max: 3 }
+  ];
+  return tasks
+    .filter(t => t.score < t.max)
+    .map(t => `${t.name} (chybí ${t.max - t.score} b.)`);
+}
+
+function initRaport() {
+  const raportSection = document.getElementById('raport');
+  if (!raportSection) return;
+
+  const evalBtn = document.getElementById('eval-story-btn');
+  const decreeBox = document.getElementById('raport-decree');
+
+  // Kliknutí na jednotlivé kartičky úkolů odroluje na daný úkol
+  raportSection.querySelectorAll('.raport-task-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.taskId;
+      if (targetId) scrollToTask(targetId);
+    });
+  });
+
+  if (!evalBtn || !decreeBox) return;
+
+  evalBtn.addEventListener('click', () => {
+    const total = Object.values(TaskScores).reduce((a, b) => a + b, 0);
+    const percent = Math.round((total / 43) * 100);
+    const firstIncomplete = getFirstIncompleteTask();
+    const missingList = getMissingTasksList();
+
+    decreeBox.style.display = 'block';
+
+    if (percent === 100) {
+      // 100 % (43/43 b.) -> Zlatá pečeť, Mistr karetního katechismu, konfety
+      decreeBox.innerHTML = `
+        <div class="decree-card decree-master">
+          <div class="wax-seal gold" aria-label="Zlatá pečeť cti">
+            <span class="wax-seal-icon">♠♥</span>
+            <span class="wax-seal-text">100 %</span>
+          </div>
+          <span class="chapter-num">✦ Oficiální osvědčení &amp; propustka ✦</span>
+          <h3 class="decree-title">Mistr karetního katechismu</h3>
+          <div class="decree-quote">
+            „Gratulujeme, dosáhl jsi 100 %! Stejně jako Richard Middleton si zasloužíš bochník chleba, kus sýra, džbán piva a zlatý navrch!“
+          </div>
+          <p class="decree-text">
+            Předstoupil jsi před shromáždění, vojenského seržanta i purkmistra a bez jediného zaváhání jsi dokázal, že v každé kartě vidíš svatou pravdu a v celém balíčku moudrost běhu času i lidských dějin. Všech 43 bodů v 6 náročných zkouškách svědčí o mimořádném postřehu, znalosti Písma a bystrém úsudku.
+          </p>
+          <div class="decree-signatures">
+            <div class="signature-item">
+              <div class="sig-hand">Richard Middleton</div>
+              <div class="sig-title">řadový voják 60. pěšího pluku</div>
+            </div>
+            <div class="signature-item">
+              <div class="sig-hand">Lord Provost of Glasgow</div>
+              <div class="sig-title">purkmistr města Glasgow</div>
+            </div>
+            <div class="signature-item">
+              <div class="sig-hand">Major posádky</div>
+              <div class="sig-title">velitel pluku a předseda raportu</div>
+            </div>
+          </div>
+          <div class="decree-btn-row">
+            <button type="button" id="confetti-replay-btn" class="task-btn">
+              🎉 Spustit znovu oslavné padající karty
+            </button>
+          </div>
+        </div>
+      `;
+
+      launchCardConfetti();
+
+      const replayBtn = document.getElementById('confetti-replay-btn');
+      if (replayBtn) {
+        replayBtn.addEventListener('click', launchCardConfetti);
+      }
+
+    } else if (percent >= 70) {
+      // 70–99 % -> Bystrý šikovatel, pochvala a tlačítko zpět k prvnímu nedokončenému úkolu
+      decreeBox.innerHTML = `
+        <div class="decree-card decree-officer">
+          <div class="wax-seal silver" aria-label="Stříbrná pečeť uznání">
+            <span class="wax-seal-icon">♦♣</span>
+            <span class="wax-seal-text">${percent} %</span>
+          </div>
+          <span class="chapter-num">✦ Písemná pochvala velitelství posádky ✦</span>
+          <h3 class="decree-title">Bystrý šikovatel</h3>
+          <div class="decree-quote">
+            „Pochvala velitelství: Pan major uznává tvůj bystrý úsudek a výbornou paměť! Tvá obhajoba byla přesvědčivá, k dosažení titulu Mistra karetního katechismu a plné odměně ti však ještě chybí pár bodů.“
+          </div>
+          <p class="decree-text">
+            Dosáhl jsi <strong>${total} z 43 bodů</strong> (${percent} %). Tvá bystrost předčí většinu mužstva, ale pro získání bochníku chleba, kusu sýra a zlaťáku je nutné dosáhnout rovných 100 %!
+          </p>
+          ${missingList.length ? `<div class="decree-missing">Zbývá doplnit body v: <strong>${missingList.join(', ')}</strong></div>` : ''}
+          <div class="decree-btn-row">
+            ${firstIncomplete ? `
+              <button type="button" id="raport-jump-btn" class="task-btn">
+                🎯 Zpět k prvnímu úkolu, kde chybí body (${firstIncomplete.name})
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      const jumpBtn = document.getElementById('raport-jump-btn');
+      if (jumpBtn && firstIncomplete) {
+        jumpBtn.addEventListener('click', () => scrollToTask(firstIncomplete.id));
+      }
+
+    } else {
+      // Pod 70 % -> Varování před trestem běhu uličkou a výzva k dokončení zbývajících úkolů
+      decreeBox.innerHTML = `
+        <div class="decree-card decree-warning">
+          <div class="wax-seal warning" aria-label="Výnos polního soudu">
+            <span class="wax-seal-icon">⚠️</span>
+            <span class="wax-seal-text">${percent} %</span>
+          </div>
+          <span class="chapter-num">✦ Výnos polního soudu ✦</span>
+          <h3 class="decree-title">Výstraha před trestem běhu uličkou</h3>
+          <div class="decree-quote">
+            „Pozor, vojáku! S tímto výkonem (${total} z 43 bodů, ${percent} %) by tě před polním soudem stihl obávaný trest běhu uličkou mezi dvěma řadami lískových prutů!“
+          </div>
+          <p class="decree-text">
+            Pan major přísně svraštil obočí a městský seržant už sahá po želízkách. Karty jsi v kostele sice vytáhl, ale před panem starostou ses zatím neobhájil! Vrať se k nedokončeným kapitolám, doplň všechny zbývající úkoly a obhaj svou čest, než tě odvedou do šatlavy.
+          </p>
+          ${missingList.length ? `<div class="decree-missing">Neúplné úkoly: <strong>${missingList.join(', ')}</strong></div>` : ''}
+          <div class="decree-btn-row">
+            ${firstIncomplete ? `
+              <button type="button" id="raport-jump-btn" class="task-btn secondary">
+                🏃 Dokončit zbývající úkoly (${firstIncomplete.name})
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      const jumpBtn = document.getElementById('raport-jump-btn');
+      if (jumpBtn && firstIncomplete) {
+        jumpBtn.addEventListener('click', () => scrollToTask(firstIncomplete.id));
+      }
+    }
+
+    decreeBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
 }
 
 /* ── DOM READY INITIALIZATION ─────────────────────────────── */
@@ -1033,6 +1309,7 @@ function initAll() {
   initTask4();
   initTask5();
   initTask6();
+  initRaport();
   updateGlobalScoreDisplay();
 }
 
